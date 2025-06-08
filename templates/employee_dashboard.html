@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" href="../static/styles/employeedashboard.css">
+</head>
+<body>
+
+
+
+    <nav class="navbar navbar-expand-lg fixed-top ">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Employee Dashboard</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+              <li>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/3a1f340de38454f63005e3dace9973a729f9f08aeab985a9d35b0edf20ed8e4b?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                  class="content-image" alt="" />
+              </li>
+              <li>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/68f9ba49f4952ad69c570d1f832dab224108b4ff93d1f93caf0f657c1e4e82f2?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                  class="content-image" alt="Content image" />
+              </li>
+    
+            </ul>
+          </div>
+          <ul class="navbar-nav ms-auto">
+    
+            <li class="nav-item-out">
+              <img loading="lazy"
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/99921d6dd55c3f3fb1416f7f306139ff0a761b5ceb085b59577bbc93faf1e710?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                class="user-avatar" alt="User avatar" />
+    
+              {% if current_user.is_authenticated %}
+                <span>Welcome, {{ current_user.username }}!</span>
+                <a data-i18n="logout" class="nav-link btn text-white mr-10 ml-10" style="background-color: red; " href="{{ url_for('logout') }}">Logout</a>
+            {% endif %}
+              
+            
+            </li>
+    
+          </ul>
+    
+        </div>
+      </nav>
+    
+    
+      <main class="main-content">
+        <div class="content-wrapper">
+                
+      <div class="container">
+        <h1 class="mt-5">Assigned Complaints</h1>
+        
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Unique ID</th>
+                    <th>Department</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>PNR Number</th>
+                    <th>Age</th>
+                    <th>Additional Info</th>
+                    <th>Images</th>
+                    <th>Urgency</th>
+                    <th>Status</th>
+                    <th>User ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for complaint in complaints %}
+                <tr>
+                    <td>{{ complaint.id }}</td>
+                    <td>{{ complaint.unique_id }}</td>
+                    <td>{{ complaint.department }}</td>
+                    <td>{{ complaint.date }}</td>
+                    <td>{{ complaint.time }}</td>
+                    <td>{{ complaint.pnr_no }}</td>
+                    <td>{{ complaint.age }}</td>
+                    <td>{{ complaint.additional_info }}</td>
+                    <td>
+                        {% if complaint.images %}
+                            {% for image in complaint.images.split(',') %}
+                                <a href="{{ url_for('static', filename='uploads/' + image) }}" target="_blank">View Image</a><br>
+                            {% endfor %}
+                        {% else %}
+                            No Images
+                        {% endif %}
+                    </td>
+                     <!-- <td>{{ complaint.urgency }}</td>  -->
+                   <td>
+                        {% if complaint.urgency is not none and complaint.urgency|int >= 30 %}
+                            <span class="badge badge-danger">High</span>
+                        {% elif complaint.urgency is not none and complaint.urgency|int >= 20 %}
+                            <span class="badge badge-warning">Medium</span>
+                        {% else %}
+                            <span class="badge badge-secondary">Low</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ complaint.status }}</td>
+                    <td>{{ complaint.user_id }}</td>
+                    <td>
+                        <form action="{{ url_for('mark_as_solved', complaint_id=complaint.unique_id) }}" method="POST">
+                            <button type="submit" class="btn btn-success">Solved</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div> 
+      </main>
+      <footer class="footer">
+        <p>Copyright© 2024 Rail Sahayak. All Rights Reserved</p>
+       
+    </footer>
+
+<script>
+    function logout(){
+        window.location.href = "{{url_for('logout')}}";
+    }
+
+   
+    // logout button toggle 
+    function showLogoutButton() {
+      document.getElementById("logout-button").style.visibility = "visible";
+    }
+
+    function hideLogoutButton() {
+      document.getElementById("logout-button").style.visibility = "hidden";
+    }
+
+</script>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Feedback Form</title>
+    <link rel="stylesheet" href="../static/styles/feedbackform.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Provide Feedback for Complaint</h2>
+        <form action="{{ url_for('submit_feedback', complaint_id=complaint.id) }}" method="POST">
+            <div class="form-group">
+                <label for="feedback_text">Your Feedback</label>
+                <textarea class="form-control" id="feedback_text" name="feedback_text" rows="4" required></textarea>
+                <label for="rating">Rating</label>
+                <div class="rating">
+                    <input type="radio" id="star5" name="rating" value="5"><label for="star5">&#9733;</label>
+                    <input type="radio" id="star4" name="rating" value="4"><label for="star4">&#9733;</label>
+                    <input type="radio" id="star3" name="rating" value="3"><label for="star3">&#9733;</label>
+                    <input type="radio" id="star2" name="rating" value="2"><label for="star2">&#9733;</label>
+                    <input type="radio" id="star1" name="rating" value="1"><label for="star1">&#9733;</label>
+                </div>
+                
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Feedback</button>
+        </form>
+    </div>
+</body>
+</html>
